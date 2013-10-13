@@ -23,13 +23,6 @@ my $job = {
 };
 my $res = $jobs_adder->append( $job );
 warn "RES: $res";
-my $res = $jobs_adder->append( $job );
-warn "RES: $res";
-my $res = $jobs_adder->append( $job );
-warn "RES: $res";
-my $res = $jobs_adder->append( $job );
-warn "RES: $res";
-
 
 $jobs_worker->get_jobs( );
 
