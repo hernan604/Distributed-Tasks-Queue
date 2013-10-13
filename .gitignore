@@ -1,0 +1,7 @@
+/Distributed-Tasks-Queue-*
+/.build
+/_build*
+/Build
+MYMETA.*
+!META.json
+/.prove
