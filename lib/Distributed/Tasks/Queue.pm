@@ -137,8 +137,6 @@ Distributed::Tasks::Queue - Distributable scalable jobs / tasks processing
 
   $jobs_worker->get_jobs( );
 
-  done_testing;
-
 and in your plugin, named Plugins::TestOnly
 
   package Plugins::TestOnly;
@@ -181,11 +179,11 @@ Distributed::Tasks::Queue allows you to queue jobs / tasks that can be processed
 
 The distributed tasks queue allows your application to insert a task into a queue. The task must include all the details regarding the task. That will make the task independent and self describing. 
 
-That way you can create a plugin to process each task. Every task must include the plugin name that will handle that task. You should create one plugin for each task. The plugin will receive an object(hash) that you inserted into the queue. That object must have all the information it needs to be processed by your plugin. Yout plugin can do whatever... save into a directory, insert into database, etc.
+That way you can create a plugin to process each task. Every task must include the plugin name that will handle that task. You should create one plugin for each task. The plugin will receive an object(hash) that you inserted into the queue. That object must have all the information it needs to be processed by your plugin. Your plugin can do whatever... save into a directory, insert into database, etc.
 
-It will use a redis engine by default but you should be able to create a similar backend queue custom class and override the engine.
+It will use a redis engine by default but you should be able to create a similar backend queue custom class and override the engine. You should be able to override any default atributes also.
 
-You should be able to override any default atributes also.
+
 
 =head1 AUTHOR
 
