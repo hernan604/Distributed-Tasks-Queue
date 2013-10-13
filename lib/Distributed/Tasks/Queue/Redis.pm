@@ -2,8 +2,8 @@ package Distributed::Tasks::Queue::Redis;
 use Moose;
 use JSON::XS;
 
-has queue_name => ( is => 'rw', default => sub { "imovelcity_jobs" }  );
-has hash_name  => ( is => 'rw', default => sub { "imovelcity_hash" }  );
+has queue_name => ( is => 'rw', default => sub { "my_jobs" }  );
+has hash_name  => ( is => 'rw', default => sub { "my_hash" }  );
 has [ qw/client expiration_time/]     => ( is => 'rw' );
 
 sub is_visited {
