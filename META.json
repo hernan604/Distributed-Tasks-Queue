@@ -1,5 +1,5 @@
 {
-   "abstract" : "Blah blah blah",
+   "abstract" : "Distributable scalable jobs / tasks processing",
    "author" : [
       "Hernan Lopes <hernan@cpan.org>"
    ],
@@ -46,6 +46,17 @@
       }
    },
    "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/hernan604/Distributed-Tasks-Queue/issues"
+      },
+      "homepage" : "https://github.com/hernan604/Distributed-Tasks-Queue",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/hernan604/Distributed-Tasks-Queue.git",
+         "web" : "https://github.com/hernan604/Distributed-Tasks-Queue"
+      }
+   },
    "version" : "0.01"
 }
 
