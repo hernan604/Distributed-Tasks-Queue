@@ -57,7 +57,7 @@ An $job looks like:
     id  => 21876931,
     job => {
         'plugin' => 'plugin_method',
-        data => {
+        description => {
             bla => 'and all the necessary stuff this job might need'
         }
     }
@@ -133,7 +133,7 @@ Distributed::Tasks::Queue - Distributable scalable jobs / tasks processing
       id => 'test_job_one',
       job => {
           plugin  => 'test_only',
-          data    => {
+          description    => {
               text    => "To be processed!",
               action  => 'duplicate_text'
           }
@@ -161,9 +161,9 @@ and in your plugin, named Plugins::TestOnly
         use DDP;
         warn p $job;
         warn "DO WHATEVER............................... the job must be independent and have every instruction it needs to be executed";
-        if ( $job->{ job }->{ data }->{ action } eq 'duplicate_text' ) {
+        if ( $job->{ job }->{ description }->{ action } eq 'duplicate_text' ) {
           #do whatever.. save on  disk etc
-          my $final_text   = $job->{job}->{data}->{text}.$job->{job}->{data}->{text};
+          my $final_text   = $job->{job}->{description}->{text}.$job->{job}->{description}->{text};
           $job->{ result } = $final_text;
           warn $final_text;
           warn "^^ FROM JOB PROCESS";

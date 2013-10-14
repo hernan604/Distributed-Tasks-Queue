@@ -16,7 +16,7 @@ my $job = {
     id => 'test_job_one',
     job => {
         plugin  => 'test_only',
-        data    => {
+        description    => {
             text    => "To be processed!",
             action  => 'duplicate_text'
         }
@@ -32,7 +32,7 @@ my $job2 = {
     id => 'test_job_two',
     job => {
         plugin  => 'test_only',
-        data    => {
+        description    => {
             text    => "<- Works ->",
             action  => 'duplicate_text'
         }

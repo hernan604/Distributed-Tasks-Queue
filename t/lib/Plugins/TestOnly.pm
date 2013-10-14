@@ -14,9 +14,9 @@ sub test_only {
       use DDP;
       warn p $job;
       warn "DO WHATEVER............................... the job must be independent and have every instruction it needs to be executed";
-      if ( $job->{ job }->{ data }->{ action } eq 'duplicate_text' ) {
+      if ( $job->{ job }->{ description }->{ action } eq 'duplicate_text' ) {
         #do whatever.. save on  disk etc
-        my $final_text   = $job->{job}->{data}->{text}.$job->{job}->{data}->{text};
+        my $final_text   = $job->{job}->{description}->{text}.$job->{job}->{description}->{text};
         $job->{ result } = $final_text;
         warn $final_text;
         warn "^^ FROM JOB PROCESS";
