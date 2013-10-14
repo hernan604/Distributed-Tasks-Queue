@@ -6,16 +6,6 @@ has queue_name => ( is => 'rw', default => sub { "my_jobs" }  );
 has hash_name  => ( is => 'rw', default => sub { "my_hash" }  );
 has [ qw/client expiration_time/]     => ( is => 'rw' );
 
-sub is_visited {
-    my ( $self, $robot, $url ) = @_;
-    my $is_visited = $self->client->hget(
-      $self->url_visited , $url
-    );    #TODO: deve ficar no arquivo de config dentro da secao redis.
-    return 1 if defined $is_visited and $is_visited ne '';
-    return 0;
-}
-
-
 sub insert_on_end {
     my ( $self, $args ) = @_;
     my $count_items = $self->client->rpush(
@@ -25,7 +15,8 @@ sub insert_on_end {
             job => $args->{job},
         } )
     );
-    $self->client->setex( $args->{ id }, $self->expiration_time, "job id saved for some seconds and will expire" );
+#   $self->client->setex( $args->{ id }, $self->expiration_time, "job id saved for some seconds and will expire" );
+    $self->client->hset( $self->hash_name, $args->{ id } => "job id saved for some seconds and will expire" );
 }
 
 sub insert_on_begining {
@@ -37,12 +28,13 @@ sub insert_on_begining {
             job => $args->{job},
         } )
     );
-    $self->client->setex( $args->{ id }, $self->expiration_time, "job id saved for some seconds and will expire" );
+#   $self->client->setex( $args->{ id }, $self->expiration_time, "job id saved for some seconds and will expire" );
+    $self->client->hset( $self->hash_name, $args->{ id } => "job id saved for some seconds and will expire" );
 }
 
 sub append {
   my ( $self, $args ) = @_;
-  if ( !$self->client->get( $args->{ id } ) ) {
+  if ( !$self->client->hget( $self->hash_name, $args->{ id } ) ) {
       $self->insert_on_end( $args );
       return 1;
   }
@@ -51,7 +43,7 @@ sub append {
 
 sub prepend {
     my ( $self, $args ) = @_; #args = { id => $id, job => $job, expire_date => '...' }
-    if ( !$self->client->get( $args->{ id } ) ) {
+    if ( !$self->client->hget( $self->hash_name, $args->{ id } ) ) {
         $self->insert_on_begining( $args );
         return 1;
     }
@@ -63,7 +55,7 @@ sub analyse_job {
     if ( defined $job ) {
       my $job = decode_json ( $job );
       if ( exists $job->{ id } ) {
-        $self->client->del( $job->{ id } );
+        $self->client->hdel( $self->hash_name, $job->{ id } );
         return $job;
       }
     }
@@ -80,6 +72,11 @@ sub get_job_blocking {
   my ( $self ) = @_;
   my ( $queue_name, $job ) = $self->client->blpop( $self->queue_name , 0 ); #TODO can receive a value that can serve as a timeout and can make the process stop... this way a cronjob could restart the jobs processor whenever necessary
   return $self->analyse_job( $job );
+}
+
+sub size {
+  my ( $self ) = @_; 
+  return $self->client->hlen( $self->hash_name );
 }
 
 
