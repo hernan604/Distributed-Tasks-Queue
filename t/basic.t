@@ -11,6 +11,7 @@ ok 1;
 my $jobs_adder  = Distributed::Tasks::Queue->new( plugin_list => [ Plugins::TestOnly->new() ] );
 my $jobs_worker = Distributed::Tasks::Queue->new( plugin_list => [ Plugins::TestOnly->new() ] );
 
+#first job to go into queue
 my $job = {
     id => 'test_job_one',
     job => {
@@ -21,9 +22,28 @@ my $job = {
         }
     }
 };
-my $res = $jobs_adder->append( $job );
-warn "RES: $res";
+$jobs_adder->append( $job );
 
-$jobs_worker->get_jobs( );
+#check the queue size
+ok( $jobs_adder->queue_size() == 1, "One item was inserted on the queue" );
+
+#another job
+my $job2 = {
+    id => 'test_job_two',
+    job => {
+        plugin  => 'test_only',
+        data    => {
+            text    => "<- Works ->",
+            action  => 'duplicate_text'
+        }
+    }
+};
+$jobs_adder->append( $job2 );
+
+#check queue size again
+ok( $jobs_adder->queue_size() == 2, "One item was inserted on the queue" );
+
+#start the worker..
+$jobs_worker->get_jobs( ); #non blocking. use get_job_blocking if wanted
 
 done_testing;
