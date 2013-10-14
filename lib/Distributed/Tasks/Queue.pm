@@ -96,6 +96,8 @@ sub process {
     if ( $self->can_process( $job->{ plugin } ) ) {
         my $export_name = $job->{ plugin };
         $self->plugins->{ $job->{ plugin } }->$export_name( $job );
+    } else {
+        warn "Cant process job for plugin: " . $job->{ plugin };
     }
 }
 
@@ -138,7 +140,7 @@ Distributed::Tasks::Queue - Distributable scalable jobs / tasks processing
       id      => 'test_job_one',
       plugin  => 'test_only',
       description => {
-          text    => "To be processed!",
+          text    => 'To be processed!',
           action  => 'duplicate_text'
       }
   };
@@ -155,24 +157,18 @@ and in your plugin, named Plugins::TestOnly
   has exports_method  => ( is => 'rw', default => sub { return 'test_only' } );
 
   sub test_only {
-    my ( $self, $job, $action ) = @_; #action: add, list delete , etc
-    my $actions = {
-      process => sub {
-        my ( $self, $job ) = @_;
-        warn "PROCESSING JOB...................................................";
-        use DDP;
-        warn p $job;
-        warn "DO WHATEVER............................... the job must be independent and have every instruction it needs to be executed";
-        if ( $job->{ job }->{ description }->{ action } eq 'duplicate_text' ) {
-          #do whatever.. save on  disk etc
-          my $final_text   = $job->{job}->{description}->{text}.$job->{job}->{description}->{text};
-          $job->{ result } = $final_text;
-          warn $final_text;
-          warn "^^ FROM JOB PROCESS";
-        }
-      }
-    };
-    $actions->{ $action }->( $self, $job );
+    my ( $self, $job ) = @_; #action: add, list delete , etc
+    warn "PROCESSING JOB...................................................";
+    use DDP;
+    warn p $job;
+    warn "DO WHATEVER............................... the job must be independent and have every instruction it needs to be executed";
+    if ( $job->{ description }->{ action } eq 'duplicate_text' ) {
+      #do whatever.. save on  disk etc
+      my $final_text   = $job->{description}->{text}.$job->{description}->{text};
+      $job->{ result } = $final_text;
+      warn $final_text;
+      warn "^^ FROM JOB PROCESS";
+    }
   }
 
   sub validate {
