@@ -76,14 +76,14 @@ An $job looks like:
 
 sub append {
     my ( $self, $args ) = @_; 
-    return $self->queue->append( $args )
-        if $self->can_process( $args->{ plugin } );
+    return $self->queue->append( $args );
+#       if $self->can_process( $args->{ plugin } );
 }
 
 sub prepend {
     my ( $self, $args ) = @_; 
-    return $self->queue->prepend( $args ) 
-        if $self->can_process( $args->{ plugin } );
+    return $self->queue->prepend( $args );
+#       if $self->can_process( $args->{ plugin } );
 }
 
 sub queue_size {
@@ -95,7 +95,7 @@ sub process {
     my ( $self, $job ) = @_; 
     if ( $self->can_process( $job->{ plugin } ) ) {
         my $export_name = $job->{ plugin };
-        $self->plugins->{ $job->{ plugin } }->$export_name( $job, 'process' );
+        $self->plugins->{ $job->{ plugin } }->$export_name( $job );
     }
 }
 
@@ -131,8 +131,7 @@ Distributed::Tasks::Queue - Distributable scalable jobs / tasks processing
   use Plugins::TestOnly;
   use Data::Printer;
 
-  # replace with the actual test
-  my $jobs_adder  = Distributed::Tasks::Queue->new( plugin_list => [ Plugins::TestOnly->new ] );
+  my $jobs_adder  = Distributed::Tasks::Queue->new( );
   my $jobs_worker = Distributed::Tasks::Queue->new( plugin_list => [ Plugins::TestOnly->new ] );
 
   my $job = {

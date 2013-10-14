@@ -8,7 +8,7 @@ use Data::Printer;;
 # replace with the actual test
 ok 1;
 
-my $jobs_adder  = Distributed::Tasks::Queue->new( plugin_list => [ Plugins::TestOnly->new() ] );
+my $jobs_adder  = Distributed::Tasks::Queue->new( );
 my $jobs_worker = Distributed::Tasks::Queue->new( plugin_list => [ Plugins::TestOnly->new() ] );
 
 #first job to go into queue

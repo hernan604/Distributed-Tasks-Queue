@@ -6,10 +6,10 @@ has caller          => ( is => 'rw' );
 has exports_method  => ( is => 'rw', default => sub { return 'test_only' } );
 
 sub test_only {
-  my ( $self, $job, $action ) = @_; #action: add, list delete , etc
-  my $actions = {
-    process => sub {
-      my ( $self, $job ) = @_;
+  my ( $self, $job ) = @_; #action: add, list delete , etc
+# my $actions = {
+#   process => sub {
+#     my ( $self, $job ) = @_;
       warn "PROCESSING JOB...................................................";
       use DDP;
       warn p $job;
@@ -21,9 +21,9 @@ sub test_only {
         warn $final_text;
         warn "^^ FROM JOB PROCESS";
       }
-    }
-  };
-  $actions->{ $action }->( $self, $job );
+#   }
+# };
+# $actions->{ $action }->( $self, $job );
 }
 
 sub validate {
