@@ -4,10 +4,21 @@ An $job looks like:
 
     {
       id          => 21876931,                # This should be unique per job
-      plugin      => 'plugin_method',
-      description => {
-          you  => 'should make this job independent.',
-          that => 'meaning you should add all the necessary stuff this job might need',
+      plugin      => 'image_resizer',         # plugin that will handle this job
+      description => {                        # job description.. all the job needs to get done
+        you  => 'should make this job independent.',
+        that => 'means you should add here all the necessary stuff this job will need',
+        for  => 'Example: ',
+        save_as => {
+            file => '/some/file.png',
+            type => '.png'
+        },
+        options => {
+            width     => 200,
+            height    => 200,
+            auto_crop => 1
+        },
+        image   => '/some/dir/image.png'
       }
     }
 
