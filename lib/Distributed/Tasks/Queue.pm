@@ -121,8 +121,8 @@ Distributed::Tasks::Queue - Distributable scalable jobs / tasks processing
   use Data::Printer;
 
   # replace with the actual test
-  my $jobs_adder  = Distributed::Tasks::Queue->new( plugin_list => [ qw/Plugins::TestOnly/ ] );
-  my $jobs_worker = Distributed::Tasks::Queue->new( plugin_list => [ qw/Plugins::TestOnly/ ] );
+  my $jobs_adder  = Distributed::Tasks::Queue->new( plugin_list => [ Plugins::TestOnly->new() ] );
+  my $jobs_worker = Distributed::Tasks::Queue->new( plugin_list => [ Plugins::TestOnly->new ] );
 
   my $job = {
       id => 'test_job_one',
