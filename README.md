@@ -103,6 +103,8 @@ get\_job\_blocking: gets new jobs in blocking mode. That means if there is nothi
 
 get\_jobs: gets all the jobs from the queue, however its non blocking and will not wait for a job if there is none. 
 
+queue\_size: returns the estimated size of the queue
+
 
 
 Each of those method will call the respective backend methods, so the queue engine can be anything. By default it uses (Redis::Client).Distributed::Tasks::Queue::Redis 
