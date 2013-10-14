@@ -1,6 +1,6 @@
 package Distributed::Tasks::Queue;
 use Moose;
-use Class::Load ':all';
+#use Class::Load ':all';
 use Distributed::Tasks::Queue::Redis;
 
 use 5.008_005;
@@ -51,23 +51,23 @@ sub block_get {
 
 =head2
 
-receives something like:
+An $job looks like:
 
-{
-  id => 21876931,
-  job => {
-      'plugin' => 'plugin_method',
-      data => {
-          bla => 'and all the necessary stuff this job might need'
-      }
+  {
+    id  => 21876931,
+    job => {
+        'plugin' => 'plugin_method',
+        data => {
+            bla => 'and all the necessary stuff this job might need'
+        }
+    }
   }
-}
 
 =cut
 
 sub append {
     my ( $self, $args ) = @_; 
-    return $self->queue->append( $args ) 
+    return $self->queue->append( $args )
         if $self->can_process( $args->{ job }->{ plugin } );
 }
 
@@ -94,11 +94,12 @@ sub can_process {
 sub BUILD {
     my ( $self ) = @_;
     map {
-        my $class = load_class( $_ );
-        my $instance = $class->new( caller => $self );
-        $self->plugins->{ $instance->exports_method } = $instance
-            if defined $instance->exports_method
-               and ! exists $self->plugins->{ $instance->exports_method }
+#       my $class = load_class( $_ );
+#       my $instance = $class->new( caller => $self );
+        $_->caller( $self );
+        $self->plugins->{ $_->exports_method } = $_
+            if defined $_->exports_method
+               and ! exists $self->plugins->{ $_->exports_method }
         } @{ $self->plugin_list };
 }
 
